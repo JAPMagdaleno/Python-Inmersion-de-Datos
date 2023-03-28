@@ -1,0 +1,85 @@
+Ejercicio de Aula 1
+
+*Top 10 promedios de Área entre Barrios *
+
+1.- Obtendremos los promedios para cada un de los barrios en el dataset y despues obtendremos el top 10 de esos promedios. italicized text italicized text
+
+[22]
+from google.colab import data_table
+data_table.enable_dataframe_formatter()
+
+from google.colab import drive
+drive.mount('/content/drive')
+import pandas as pd
+[25]
+7s
+inmuebles = pd.read_csv('/content/drive/MyDrive/inmuebles_bogota.csv')
+columnas = {'Baños':'Banos','Área':'Area'}
+inmuebles = inmuebles.rename(columns=columnas)
+inmuebles
+
+
+
+Ahora verificamos si todos los valores de la colunma Área contiene un dato, esto para saber si el promedio se hará correctamente
+
+y efectivamente vemos que tenemos en total 9520 registros y la columna Área todas son 'non-null' -> 4 Area 9520 non-null int64
+
+asi como todos los regitros para la columna Barrio 5 Barrio 9520 non-null object
+
+[34]
+0s
+inmuebles.info()
+
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 9520 entries, 0 to 9519
+Data columns (total 8 columns):
+ #   Column        Non-Null Count  Dtype 
+---  ------        --------------  ----- 
+ 0   Tipo          9520 non-null   object
+ 1   Descripcion   9520 non-null   object
+ 2   Habitaciones  9520 non-null   int64 
+ 3   Banos         9520 non-null   int64 
+ 4   Area          9520 non-null   int64 
+ 5   Barrio        9520 non-null   object
+ 6   UPZ           9478 non-null   object
+ 7   Valor         9520 non-null   object
+dtypes: int64(3), object(5)
+memory usage: 595.1+ KB
+[44]
+0s
+from numpy import False_
+inmuebles_barrio = inmuebles.groupby("Barrio").Area.mean().sort_values(ascending=False_)
+inmuebles_barrio
+Barrio
+Modelia            4316.750000
+Libertador          642.000000
+Bosa Piamonte       400.000000
+La Soledad          378.625000
+Restrepo            336.500000
+                      ...     
+La Merced            41.000000
+El Tunal             41.000000
+San Diego            40.666667
+La Macarena          37.000000
+Prado Veraniego      25.000000
+Name: Area, Length: 149, dtype: float64
+[45]
+0s
+inmuebles_barrio.head(10).plot.bar()
+
+[46]
+0s
+conteo = inmuebles.Area.count()
+mediana = inmuebles.Area.median()
+valor_minimo = inmuebles.Area.min()
+valor_maximo = inmuebles.Area.max()
+
+print(f'El conteo es {conteo}')
+print(f'La mediana del Area observada es {mediana}')
+print(f'El valor minimo de Area es {valor_minimo}')
+print(f'El valor maximo de Area es {valor_maximo}')
+El conteo es 9520
+La mediana del Area observada es 80.0
+El valor minimo de Area es 2
+El valor maximo de Area es 166243
+[ ]
